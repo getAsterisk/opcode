@@ -1,3 +1,4 @@
+
 <div align="center">
   <img src="src-tauri/icons/icon.png" alt="opcode Logo" width="120" height="120">
 
@@ -21,7 +22,11 @@
 
 ![457013521-6133a738-d0cb-4d3e-8746-c6768c82672c](https://github.com/user-attachments/assets/a028de9e-d881-44d8-bae5-7326ab3558b9)
 
-https://github.com/user-attachments/assets/bf0bdf9d-ba91-45af-9ac4-7274f57075cf
+
+
+https://github.com/user-attachments/assets/6bceea0f-60b6-4c3e-a745-b891de00b8d0
+
+
 
 > [!TIP]
 > **⭐ Star the repo and follow [@getAsterisk](https://x.com/getAsterisk) on X for early access to `asteria-swe-v0`**.
