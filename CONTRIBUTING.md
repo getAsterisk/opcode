@@ -64,4 +64,30 @@ When submitting a pull request, please follow these guidelines:
 - Run `cargo test` for Rust code
 - Test the application manually before submitting
 
+## Build Issues and Solutions
+
+### macOS Universal Binary Build
+
+When contributing changes that affect the build process, especially for macOS universal binaries, be aware of a common build issue where the universal binary creation may fail.
+
+**Issue**: `bun run tauri build --target universal-apple-darwin` may fail due to missing universal binary.
+
+**Solution**: Follow the detailed [Universal Binary Creation (macOS)](README.md#universal-binary-creation-macos) guide in the README.md for the complete step-by-step solution.
+
+### Testing Your Build
+
+Before submitting a PR that affects the build process:
+
+1. **Test on your target platform**: Build and run the application
+2. **Verify binary architecture** (macOS): Use `lipo -info` to check universal binary (see README.md for details)
+3. **Check final artifacts**: Ensure `.app` and `.dmg` files are created correctly
+4. **Test the built application**: Launch the built app and verify core functionality
+
+### Known Build Dependencies
+
+Contributors should ensure these are available:
+- **macOS**: Xcode Command Line Tools, `lipo` utility
+- **All platforms**: Claude Code CLI in PATH
+- **Development**: All prerequisites listed in README.md
+
 Please adhere to the coding conventions, maintain clear documentation, and provide thorough testing for your contributions. 
