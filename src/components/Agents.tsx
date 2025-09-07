@@ -122,17 +122,14 @@ export const Agents: React.FC = () => {
     try {
       const selected = await openDialog({
         filters: [
-          { name: 'JSON Files', extensions: ['json'] },
+          { name: 'opcode Agent', extensions: ['opcode.json', 'json'] },
           { name: 'All Files', extensions: ['*'] }
         ],
         multiple: false,
       });
 
       if (selected) {
-        const fileContent = await invoke<string>('read_text_file', { path: selected });
-        const agentData = JSON.parse(fileContent);
-        
-        const importedAgent = await api.importAgent(JSON.stringify(agentData));
+        const importedAgent = await api.importAgentFromFile(selected as string);
         setToast({ message: `Imported agent: ${importedAgent.name}`, type: 'success' });
         loadAgents();
       }
@@ -145,18 +142,14 @@ export const Agents: React.FC = () => {
   const handleExportAgent = async (agent: Agent) => {
     try {
       const path = await save({
-        defaultPath: `${agent.name}.json`,
+        defaultPath: `${agent.name.toLowerCase().replace(/\s+/g, '-')}.opcode.json`,
         filters: [
-          { name: 'JSON Files', extensions: ['json'] }
+          { name: 'opcode Agent', extensions: ['opcode.json'] }
         ]
       });
 
       if (path && agent.id) {
-        const agentData = await api.exportAgent(agent.id);
-        await invoke('write_text_file', {
-          path,
-          contents: agentData
-        });
+        await invoke('export_agent_to_file', { id: agent.id, filePath: path });
         setToast({ message: `Exported agent: ${agent.name}`, type: 'success' });
       }
     } catch (error) {

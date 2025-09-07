@@ -179,10 +179,7 @@ pub async fn read_session_jsonl(session_id: &str, project_path: &str) -> Result<
     let session_file = project_dir.join(format!("{}.jsonl", session_id));
 
     if !session_file.exists() {
-        return Err(format!(
-            "Session file not found: {}",
-            session_file.display()
-        ));
+        return Err(format!("Session file not found: {}", session_file.display()));
     }
 
     match tokio::fs::read_to_string(&session_file).await {
@@ -1762,8 +1759,15 @@ pub async fn import_agent_from_file(
     file_path: String,
 ) -> Result<Agent, String> {
     // Read the file
-    let json_data =
+    let mut json_data =
         std::fs::read_to_string(&file_path).map_err(|e| format!("Failed to read file: {}", e))?;
+
+    // Normalize potential BOM and whitespace issues
+    if json_data.starts_with('\u{feff}') {
+        json_data = json_data.trim_start_matches('\u{feff}').to_string();
+    }
+    // Also trim leading/trailing whitespace to avoid parse surprises
+    json_data = json_data.trim().to_string();
 
     // Import the agent
     import_agent(db, json_data).await
