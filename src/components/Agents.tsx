@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bot, Loader2, Play, Clock, CheckCircle, XCircle, Trash2, Import, ChevronDown, ChevronRight, FileJson, Globe, Download, Plus, History } from 'lucide-react';
+import { Bot, Loader2, Play, Clock, CheckCircle, XCircle, Trash2, Import, ChevronDown, ChevronRight, FileJson, Globe, Download, Plus, History, Edit } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,6 +22,7 @@ import { useTabState } from '@/hooks/useTabState';
 export const Agents: React.FC = () => {
   const [activeTab, setActiveTab] = useState('agents');
   const [showCreateAgent, setShowCreateAgent] = useState(false);
+  const [editingAgent, setEditingAgent] = useState<Agent | null>(null);
   const [agents, setAgents] = useState<Agent[]>([]);
   const [runningAgents, setRunningAgents] = useState<AgentRunWithMetrics[]>([]);
   const [loading, setLoading] = useState(true);
@@ -179,6 +180,20 @@ export const Agents: React.FC = () => {
         onAgentCreated={() => {
           setShowCreateAgent(false);
           loadAgents(); // Reload agents after creation
+        }}
+      />
+    );
+  }
+
+  // Show CreateAgent component in edit mode
+  if (editingAgent) {
+    return (
+      <CreateAgent
+        agent={editingAgent}
+        onBack={() => setEditingAgent(null)}
+        onAgentCreated={() => {
+          setEditingAgent(null);
+          loadAgents(); // Reload agents after update
         }}
       />
     );
@@ -344,6 +359,10 @@ export const Agents: React.FC = () => {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => setEditingAgent(agent)}>
+                              <Edit className="w-4 h-4 mr-2" />
+                              Edit
+                            </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => handleRunAgent(agent)}>
                               <Play className="w-4 h-4 mr-2" />
                               Run
